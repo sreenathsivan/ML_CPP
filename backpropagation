@@ -1,0 +1,50 @@
+When backpropagating through a neural network with a sigmoid activation function in the last layer, the process involves several steps. Here’s a simplified outline:
+
+### 1. **Forward Pass**
+   - Compute the output of the network using the sigmoid activation function:
+     \[
+     \hat{y} = \sigma(z) = \frac{1}{1 + e^{-z}}
+     \]
+   - Here, \( z \) is the input to the last layer, calculated from the previous layer's outputs.
+
+### 2. **Calculate Loss**
+   - Use a loss function suitable for binary classification, such as binary cross-entropy:
+     \[
+     L = -\frac{1}{N} \sum_{i=1}^{N} [y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i)]
+     \]
+   - Here, \( y_i \) is the true label, and \( \hat{y}_i \) is the predicted output.
+
+### 3. **Backward Pass**
+   - **Calculate the Gradient of the Loss with Respect to the Output:**
+     \[
+     \frac{\partial L}{\partial \hat{y}} = -\frac{y}{\hat{y}} + \frac{1 - y}{1 - \hat{y}} = \frac{\hat{y} - y}{\hat{y}(1 - \hat{y})}
+     \]
+   - This accounts for how much the predicted output affects the loss.
+
+### 4. **Calculate the Gradient of the Sigmoid Function:**
+   - The derivative of the sigmoid function is:
+     \[
+     \sigma'(z) = \hat{y}(1 - \hat{y})
+     \]
+
+### 5. **Chain Rule Application:**
+   - Apply the chain rule to find the gradient of the loss with respect to the input to the sigmoid:
+     \[
+     \frac{\partial L}{\partial z} = \frac{\partial L}{\partial \hat{y}} \cdot \sigma'(z)
+     \]
+   - This gives you the gradient with respect to the output of the last layer.
+
+### 6. **Backpropagate Further:**
+   - If there are preceding layers, continue to backpropagate using the computed gradients:
+     - Calculate the gradient of the loss with respect to the weights and biases of the last layer.
+     - Move backward through each layer, applying the chain rule to compute the gradients for weights and biases.
+
+### 7. **Update Weights:**
+   - Once gradients are computed, update the weights and biases using an optimization algorithm (like gradient descent):
+     \[
+     w = w - \eta \frac{\partial L}{\partial w}
+     \]
+   - Here, \( \eta \) is the learning rate.
+
+### Summary
+This process continues iteratively through many epochs, updating the weights based on the gradients until convergence. Each of these steps ensures that the network learns to minimize the loss and improve its predictions.
